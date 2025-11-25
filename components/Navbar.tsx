@@ -83,7 +83,7 @@ export default function Navbar() {
                 <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
               </div>
               <span className="text-base sm:text-xl font-bold text-blue-accent hidden xs:inline">
-                QUANTUM TRADE NEXUS
+                QUANTUM AUSTRADE
               </span>
               <span className="text-base sm:text-xl font-bold text-blue-accent xs:hidden">
                 QTN

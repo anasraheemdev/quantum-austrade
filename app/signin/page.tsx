@@ -68,7 +68,7 @@ function SignInForm() {
             <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-gradient shadow-blue-glow">
               <TrendingUp className="h-7 w-7 text-white" />
             </div>
-            <span className="text-2xl font-bold text-blue-accent">QUANTUM TRADE NEXUS</span>
+            <span className="text-2xl font-bold text-blue-accent">QUANTUM AUSTRADE</span>
           </Link>
           <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
           <p className="text-blue-accent/70">

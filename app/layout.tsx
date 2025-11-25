@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "QUANTUM TRADE NEXUS - Trading Platform",
+  title: "QUANTUM AUSTRADE - Trading Platform",
   description: "Modern trading platform with real-time market data",
 };
 

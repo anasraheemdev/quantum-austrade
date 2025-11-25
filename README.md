@@ -1,4 +1,4 @@
-# QUANTUM TRADE NEXUS - Trading Platform UI
+# QUANTUM AUSTRADE - Trading Platform UI
 
 A modern, fully static trading platform built with Next.js 14 (App Router), featuring a beautiful bluish-dark theme with simulated live stock prices and comprehensive trading interface.
 
@@ -16,11 +16,11 @@ A modern, fully static trading platform built with Next.js 14 (App Router), feat
 
 ## 🎨 Theme
 
-The platform uses a consistent bluish-dark theme throughout:
+The platform uses a consistent green and blue theme throughout:
 - Dark navy backgrounds (`#0a0e27`, `#0f1629`)
-- Blue gradients and accents
-- Neon blue glow highlights
-- Light blue text and UI elements
+- Green and blue gradients and accents
+- Neon green and blue glow highlights
+- Light blue and green text and UI elements
 - Smooth transitions and hover effects
 
 ## 📦 Tech Stack
@@ -109,9 +109,9 @@ Data is stored in static JSON files for fast performance:
 ## 🎨 Customization
 
 The theme can be customized in `tailwind.config.ts`:
-- Colors: `dark-bg`, `dark-card`, `blue-primary`, `blue-accent`, etc.
-- Gradients: `blue-gradient`
-- Shadows: `blue-glow`, `neon-blue`
+- Colors: `dark-bg`, `dark-card`, `blue-primary`, `blue-accent`, `green-primary`, `green-accent`, etc.
+- Gradients: `blue-gradient` (now includes green), `green-blue-gradient`
+- Shadows: `blue-glow`, `green-blue-glow`, `neon-blue`, `neon-green`
 
 ## 📝 Notes
 

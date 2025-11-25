@@ -61,7 +61,7 @@ export default function LandingPage() {
             <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-blue-gradient shadow-blue-glow">
               <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
             </div>
-            <span className="text-base sm:text-xl font-bold text-blue-accent">QUANTUM TRADE NEXUS</span>
+            <span className="text-base sm:text-xl font-bold text-blue-accent">QUANTUM AUSTRADE</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-4">
             <Link
@@ -216,7 +216,7 @@ export default function LandingPage() {
                 Ready to Start Trading?
               </h2>
               <p className="text-lg sm:text-xl text-blue-accent/70 mb-6 sm:mb-8 max-w-2xl mx-auto">
-                Join thousands of traders and investors who trust QUANTUM TRADE NEXUS for their
+                Join thousands of traders and investors who trust QUANTUM AUSTRADE for their
                 trading needs.
               </p>
               <Link
@@ -239,10 +239,10 @@ export default function LandingPage() {
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-gradient">
                 <TrendingUp className="h-5 w-5 text-white" />
               </div>
-              <span className="text-base sm:text-lg font-bold text-blue-accent">QUANTUM TRADE NEXUS</span>
+              <span className="text-base sm:text-lg font-bold text-blue-accent">QUANTUM AUSTRADE</span>
             </Link>
             <div className="text-xs sm:text-sm text-blue-accent/70">
-              © 2024 QUANTUM TRADE NEXUS. All rights reserved.
+              © 2024 QUANTUM AUSTRADE. All rights reserved.
             </div>
           </div>
         </div>
