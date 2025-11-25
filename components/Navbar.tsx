@@ -79,14 +79,14 @@ export default function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3">
             <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-blue-gradient shadow-blue-glow">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-blue-green-gradient shadow-blue-green-glow">
                 <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
               </div>
               <span className="text-base sm:text-xl font-bold text-blue-accent hidden xs:inline">
                 QUANTUM AUSTRADE
               </span>
               <span className="text-base sm:text-xl font-bold text-blue-accent xs:hidden">
-                QTN
+                QA
               </span>
             </Link>
           </div>
@@ -205,7 +205,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/signin"
-                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-blue-gradient text-white text-xs sm:text-sm font-medium hover:shadow-blue-glow transition-all active:scale-95"
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-blue-green-gradient text-white text-xs sm:text-sm font-medium hover:shadow-blue-green-glow transition-all active:scale-95"
                 >
                   Get Started
                 </Link>

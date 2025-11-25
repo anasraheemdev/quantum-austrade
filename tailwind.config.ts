@@ -39,14 +39,16 @@ const config: Config = {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "blue-gradient": "linear-gradient(135deg, #059669 0%, #10b981 30%, #3b82f6 70%, #1e40af 100%)",
-        "green-blue-gradient": "linear-gradient(135deg, #059669 0%, #10b981 30%, #3b82f6 70%, #1e40af 100%)",
+        "blue-gradient": "linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%)",
+        "green-gradient": "linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)",
+        "blue-green-gradient": "linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #10b981 75%, #059669 100%)",
       },
       boxShadow: {
-        "blue-glow": "0 0 20px rgba(59, 130, 246, 0.5), 0 0 10px rgba(16, 185, 129, 0.3)",
+        "blue-glow": "0 0 20px rgba(59, 130, 246, 0.5)",
+        "green-glow": "0 0 20px rgba(16, 185, 129, 0.5)",
+        "blue-green-glow": "0 0 20px rgba(59, 130, 246, 0.3), 0 0 20px rgba(16, 185, 129, 0.3)",
         "neon-blue": "0 0 10px rgba(0, 217, 255, 0.8)",
         "neon-green": "0 0 10px rgba(0, 255, 136, 0.8)",
-        "green-blue-glow": "0 0 20px rgba(59, 130, 246, 0.5), 0 0 10px rgba(16, 185, 129, 0.3)",
       },
       animation: {
         "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
@@ -55,8 +57,8 @@ const config: Config = {
       },
       keyframes: {
         glow: {
-          "0%": { boxShadow: "0 0 5px rgba(59, 130, 246, 0.5), 0 0 3px rgba(16, 185, 129, 0.3)" },
-          "100%": { boxShadow: "0 0 20px rgba(59, 130, 246, 0.8), 0 0 10px rgba(16, 185, 129, 0.5)" },
+          "0%": { boxShadow: "0 0 5px rgba(59, 130, 246, 0.5), 0 0 5px rgba(16, 185, 129, 0.5)" },
+          "100%": { boxShadow: "0 0 20px rgba(59, 130, 246, 0.8), 0 0 20px rgba(16, 185, 129, 0.8)" },
         },
       },
     },
