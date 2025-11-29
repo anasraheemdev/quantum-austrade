@@ -145,9 +145,17 @@ export default function AdminTradeModal({
         throw new Error(fullError);
       }
 
+      console.log("Trade successful! Response:", data);
+      console.log("Updated balance from API:", data.updatedBalance);
+
       setSuccess(true);
+      
+      // Call onTradeSuccess immediately to refresh data
+      // This will fetch the latest data from the database
+      onTradeSuccess();
+      
+      // Close modal after a short delay
       setTimeout(() => {
-        onTradeSuccess();
         onClose();
         setSymbol("");
         setQuantity("");

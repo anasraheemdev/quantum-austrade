@@ -59,7 +59,7 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 w-full border-b border-dark-border bg-dark-card/80 backdrop-blur-md">
         <div className="flex h-16 items-center justify-between px-6">
           <div className="flex items-center gap-2">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-green-gradient shadow-blue-green-glow">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-blue-gradient shadow-green-glow">
               <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <span className="text-xl font-bold text-blue-accent">QUANTUM AUSTRADE</span>
@@ -73,7 +73,7 @@ export default function LandingPage() {
             </Link>
             <Link
               href="/signin"
-              className="px-4 py-2 rounded-lg bg-blue-green-gradient text-white font-medium hover:shadow-blue-green-glow transition-all"
+              className="px-4 py-2 rounded-lg bg-green-blue-gradient text-white font-medium hover:shadow-green-glow transition-all"
             >
               Get Started
             </Link>
@@ -96,7 +96,7 @@ export default function LandingPage() {
               className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
             >
               Trade Smarter,{" "}
-              <span className="bg-blue-green-gradient bg-clip-text text-transparent">
+              <span className="bg-green-blue-gradient bg-clip-text text-transparent">
                 Invest Better
               </span>
             </motion.h1>
@@ -118,7 +118,7 @@ export default function LandingPage() {
             >
               <Link
                 href="/signin"
-                className="group flex items-center gap-2 px-8 py-4 rounded-lg bg-blue-green-gradient text-white font-semibold text-lg hover:shadow-blue-green-glow transition-all"
+                className="group flex items-center gap-2 px-8 py-4 rounded-lg bg-green-blue-gradient text-white font-semibold text-lg hover:shadow-green-glow transition-all"
               >
                 Start Trading Now
                 <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
@@ -186,9 +186,9 @@ export default function LandingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="rounded-lg border border-dark-border bg-dark-card p-6 hover:border-blue-primary hover:shadow-blue-glow transition-all"
+                  className="rounded-lg border border-dark-border bg-dark-card p-6 hover:border-green-primary hover:shadow-green-glow transition-all"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-green-gradient mb-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-blue-gradient mb-4">
                     <Icon className="h-6 w-6 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-blue-accent mb-2">
@@ -211,7 +211,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="rounded-2xl border border-dark-border bg-dark-card p-12 text-center relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-blue-green-gradient opacity-10"></div>
+            <div className="absolute inset-0 bg-green-blue-gradient opacity-10"></div>
             <div className="relative z-10">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
                 Ready to Start Trading?
@@ -222,7 +222,7 @@ export default function LandingPage() {
               </p>
               <Link
                 href="/signin"
-                className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-blue-green-gradient text-white font-semibold text-lg hover:shadow-blue-green-glow transition-all"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-lg bg-green-blue-gradient text-white font-semibold text-lg hover:shadow-green-glow transition-all"
               >
                 Create Free Account
                 <ArrowRight className="h-5 w-5" />
@@ -237,7 +237,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-green-gradient">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-blue-gradient">
                 <TrendingUp className="h-5 w-5 text-white" />
               </div>
               <span className="text-lg font-bold text-blue-accent">QUANTUM AUSTRADE</span>

@@ -33,21 +33,27 @@ export default function Navbar() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          cache: 'no-store',
         });
 
         if (response.ok) {
           const data = await response.json();
+          console.log("Notification count fetched:", data.unreadCount);
           setUnreadCount(data.unreadCount || 0);
+        } else {
+          const errorData = await response.json();
+          console.error("Error fetching notification count:", errorData);
         }
       } catch (error) {
         console.error("Error fetching notification count:", error);
       }
     };
 
+    // Fetch immediately
     fetchNotificationCount();
 
-    // Poll for new notifications every 30 seconds
-    const interval = setInterval(fetchNotificationCount, 30000);
+    // Poll for new notifications every 10 seconds (more frequent for better UX)
+    const interval = setInterval(fetchNotificationCount, 10000);
 
     return () => clearInterval(interval);
   }, [session, user]);
@@ -79,7 +85,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 sm:gap-3">
             <MobileMenuButton onClick={() => setIsSidebarOpen(true)} />
             <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-blue-green-gradient shadow-blue-green-glow">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-green-blue-gradient shadow-green-glow">
                 <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
               </div>
               <span className="text-base sm:text-xl font-bold text-blue-accent hidden xs:inline">
@@ -205,7 +211,7 @@ export default function Navbar() {
                 </Link>
                 <Link
                   href="/signin"
-                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-blue-green-gradient text-white text-xs sm:text-sm font-medium hover:shadow-blue-green-glow transition-all active:scale-95"
+                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg bg-green-blue-gradient text-white text-xs sm:text-sm font-medium hover:shadow-green-glow transition-all active:scale-95"
                 >
                   Get Started
                 </Link>

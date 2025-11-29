@@ -65,7 +65,7 @@ function SignInForm() {
           className="text-center mb-8"
         >
           <Link href="/" className="inline-flex items-center gap-2 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-green-gradient shadow-blue-green-glow">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-blue-gradient shadow-green-glow">
               <TrendingUp className="h-7 w-7 text-white" />
             </div>
             <span className="text-2xl font-bold text-blue-accent">QUANTUM AUSTRADE</span>
@@ -169,7 +169,7 @@ function SignInForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-blue-green-gradient text-white font-semibold hover:shadow-blue-green-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-green-blue-gradient text-white font-semibold hover:shadow-green-glow transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <>

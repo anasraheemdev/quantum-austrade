@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, tryCreateAdminClient } from "@/lib/supabase";
 import { isAdmin } from "@/lib/admin";
+import { notifyTradeExecution } from "@/lib/notifications";
 import fs from "fs";
 import path from "path";
 
@@ -138,8 +139,12 @@ export async function POST(request: NextRequest) {
     const fee = total * 0.001; // 0.1% fee
     const totalCost = total + fee;
 
-    // Use admin client for all operations (reuse the one we created earlier)
-    const adminClient = adminClientForAuth || supabase;
+    // Use admin client for all operations - MUST use admin client to bypass RLS
+    const adminClient = tryCreateAdminClient();
+    if (!adminClient) {
+      console.error("Admin trade: Admin client not available");
+      return NextResponse.json({ error: "Admin client not available" }, { status: 500 });
+    }
 
     // Get client's current balance
     const { data: clientData, error: clientError } = await adminClient
@@ -166,15 +171,28 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Insufficient balance" }, { status: 400 });
       }
 
-      // Update balance
-      const { error: balanceError } = await adminClient
+      // Update balance - use admin client to bypass RLS
+      const newBalance = Number(clientData.account_balance) - Number(totalCost);
+      const { data: updatedClient, error: balanceError } = await adminClient
         .from("users")
-        .update({ account_balance: clientData.account_balance - totalCost })
-        .eq("id", clientId);
+        .update({ account_balance: newBalance })
+        .eq("id", clientId)
+        .select("account_balance")
+        .single();
 
-      if (balanceError) {
-        return NextResponse.json({ error: "Failed to update balance" }, { status: 500 });
+      if (balanceError || !updatedClient) {
+        console.error("Balance update error:", balanceError);
+        return NextResponse.json({ 
+          error: "Failed to update balance", 
+          details: balanceError?.message 
+        }, { status: 500 });
       }
+
+      console.log("Balance updated (BUY):", {
+        old: clientData.account_balance,
+        new: newBalance,
+        updated: updatedClient.account_balance
+      });
 
       // Update or create position
       if (position) {
@@ -212,15 +230,28 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Insufficient shares" }, { status: 400 });
       }
 
-      // Update balance
-      const { error: balanceError } = await adminClient
+      // Update balance - use admin client to bypass RLS
+      const newBalance = Number(clientData.account_balance) + Number(total) - Number(fee);
+      const { data: updatedClient, error: balanceError } = await adminClient
         .from("users")
-        .update({ account_balance: clientData.account_balance + total - fee })
-        .eq("id", clientId);
+        .update({ account_balance: newBalance })
+        .eq("id", clientId)
+        .select("account_balance")
+        .single();
 
-      if (balanceError) {
-        return NextResponse.json({ error: "Failed to update balance" }, { status: 500 });
+      if (balanceError || !updatedClient) {
+        console.error("Balance update error:", balanceError);
+        return NextResponse.json({ 
+          error: "Failed to update balance", 
+          details: balanceError?.message 
+        }, { status: 500 });
       }
+
+      console.log("Balance updated:", {
+        old: clientData.account_balance,
+        new: newBalance,
+        updated: updatedClient.account_balance
+      });
 
       // Update position
       const newQuantity = position.quantity - quantity;
@@ -260,10 +291,73 @@ export async function POST(request: NextRequest) {
 
     if (transactionError) {
       console.error("Error recording transaction:", transactionError);
-      // Don't fail the request if transaction recording fails
+      // Don't fail the request if transaction recording fails, but log it
     }
 
-    return NextResponse.json({ success: true });
+    // Fetch updated client data to verify and return
+    // Use a fresh query to ensure we get the latest data from database
+    const { data: finalClientData, error: fetchError } = await adminClient
+      .from("users")
+      .select("account_balance, total_invested")
+      .eq("id", clientId)
+      .single();
+
+    if (fetchError) {
+      console.error("Error fetching updated client data:", fetchError);
+    }
+
+    // Verify the balance was actually updated
+    const expectedBalance = type === "buy" 
+      ? Number(clientData.account_balance) - Number(totalCost)
+      : Number(clientData.account_balance) + Number(total) - Number(fee);
+
+    console.log("Trade completed - Balance verification:", {
+      clientId,
+      symbol,
+      type,
+      quantity,
+      price,
+      totalCost,
+      oldBalance: clientData.account_balance,
+      expectedBalance,
+      actualBalance: finalClientData?.account_balance,
+      match: finalClientData?.account_balance === expectedBalance
+    });
+
+    if (finalClientData && Math.abs(Number(finalClientData.account_balance) - expectedBalance) > 0.01) {
+      console.warn("⚠️ Balance mismatch detected! Expected:", expectedBalance, "Got:", finalClientData.account_balance);
+    }
+
+    // Create notification for the client
+    try {
+      console.log("🔔 Attempting to create trade notification for client:", clientId);
+      const notificationResult = await notifyTradeExecution(
+        clientId,
+        symbol,
+        type,
+        quantity,
+        price,
+        totalCost,
+        user.id
+      );
+      console.log("🔔 Trade notification creation result:", notificationResult);
+    } catch (notificationError) {
+      console.error("❌ Error creating trade notification (non-fatal):", notificationError);
+      // Don't fail the trade if notification fails
+    }
+
+    return NextResponse.json({ 
+      success: true,
+      updatedBalance: finalClientData?.account_balance,
+      oldBalance: clientData.account_balance,
+      transactionRecorded: !transactionError
+    }, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   } catch (error) {
     console.error("Error processing admin trade:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
