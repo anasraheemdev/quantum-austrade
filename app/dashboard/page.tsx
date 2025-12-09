@@ -7,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import PriceTicker from "@/components/PriceTicker";
 import PortfolioSummary from "@/components/PortfolioSummary";
+import UserActiveTrades from "@/components/UserActiveTrades";
 import Watchlist from "@/components/Watchlist";
 import MarketMovers from "@/components/MarketMovers";
 import StockCard from "@/components/StockCard";
@@ -29,14 +30,14 @@ export default function DashboardPage() {
     if (authLoading) {
       return;
     }
-    
+
     // Only redirect if auth is done loading and user is still not authenticated
     if (!user) {
       console.log('No user, redirecting to signin');
       router.replace("/signin?redirect=/dashboard");
       return;
     }
-    
+
     // Check if user is admin and redirect to admin dashboard
     const checkAdminAndRedirect = async () => {
       if (session) {
@@ -56,9 +57,9 @@ export default function DashboardPage() {
         }
       }
     };
-    
+
     checkAdminAndRedirect();
-    
+
     // User exists, proceed with data fetching
     if (!user) {
       return;
@@ -134,7 +135,7 @@ export default function DashboardPage() {
     };
 
     fetchData();
-    
+
     // Listen for balance update events
     const handleBalanceUpdate = () => {
       if (user && session) {
@@ -143,17 +144,17 @@ export default function DashboardPage() {
         }, 500);
       }
     };
-    
+
     // Poll for balance updates every 5 seconds
     const pollInterval = setInterval(() => {
       if (user && session && !document.hidden) {
         fetchData();
       }
     }, 5000);
-    
+
     window.addEventListener('balanceUpdated', handleBalanceUpdate);
     window.addEventListener('storage', handleBalanceUpdate);
-    
+
     return () => {
       clearInterval(pollInterval);
       window.removeEventListener('balanceUpdated', handleBalanceUpdate);
@@ -206,28 +207,20 @@ export default function DashboardPage() {
                     View your investments and market activity
                   </p>
                 </div>
-                <div className="hidden sm:block">
-                  <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg px-4 py-2">
-                    <p className="text-xs text-blue-400">
-                      <span className="font-semibold">Note:</span> Trading is managed by administrators
-                    </p>
-                  </div>
-                </div>
-              </div>
-              {/* Mobile notice */}
-              <div className="sm:hidden bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 mt-4">
-                <p className="text-xs text-blue-400">
-                  <span className="font-semibold">Note:</span> Trading is managed by administrators
-                </p>
               </div>
             </motion.div>
 
             {/* Portfolio Summary */}
-            <div className="mb-6 sm:mb-8">
+            <section className="mb-8">
               <PortfolioSummary portfolio={portfolio} />
-            </div>
+            </section>
 
-            {/* Portfolio Positions */}
+            {/* Active Time Trades */}
+            <section className="mb-8">
+              <UserActiveTrades />
+            </section>
+
+            {/* Market Overview */}           {/* Portfolio Positions */}
             <div className="mb-6 sm:mb-8">
               <div className="flex items-center justify-between mb-4 sm:mb-6">
                 <h2 className="text-xl sm:text-2xl font-bold text-blue-accent">Your Positions</h2>
@@ -296,9 +289,8 @@ export default function DashboardPage() {
                             </td>
                             <td className="px-3 sm:px-6 py-3 sm:py-4">
                               <div
-                                className={`flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold ${
-                                  isPositive ? "text-green-400" : "text-red-400"
-                                }`}
+                                className={`flex items-center gap-1 sm:gap-2 text-xs sm:text-sm font-semibold ${isPositive ? "text-green-400" : "text-red-400"
+                                  }`}
                               >
                                 {isPositive ? (
                                   <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -338,8 +330,8 @@ export default function DashboardPage() {
             </div>
           </div>
         </main>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 }
 

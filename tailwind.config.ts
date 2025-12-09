@@ -10,64 +10,50 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Green and Blue theme colors
         dark: {
-          bg: "#0a0e27",
-          card: "#0f1629",
-          hover: "#151b2e",
-          border: "#1a2332",
+          bg: "#020408", // Deep Navy Black
+          card: "#050A14", // Dark Blue-Grey
+          hover: "#0A1428", // Lighter Navy
+          border: "#112240",
         },
         blue: {
           primary: "#3b82f6",
           secondary: "#60a5fa",
           accent: "#93c5fd",
-          glow: "#3b82f6",
-          dark: "#1e40af",
+          glow: "#2563eb",
+          dark: "#1e3a8a",
         },
         green: {
-          primary: "#10b981",
-          secondary: "#34d399",
-          accent: "#6ee7b7",
-          glow: "#10b981",
-          dark: "#059669",
+          primary: "#10b981", // Emerald 500
+          secondary: "#34d399", // Emerald 400
+          accent: "#6ee7b7", // Emerald 300
+          glow: "#059669",
         },
-        neon: {
-          blue: "#00d9ff",
-          green: "#00ff88",
-        },
+        brand: {
+          primary: "#0ea5e9", // Sky Blue
+          secondary: "#10b981", // Emerald Green
+          accent: "#06b6d4", // Cyan
+        }
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
         "blue-gradient": "linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%)",
-        "green-gradient": "linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%)",
-        "green-blue-gradient": "linear-gradient(135deg, #10b981 0%, #3b82f6 50%, #60a5fa 100%)",
+        "ocean-gradient": "linear-gradient(135deg, #0ea5e9 0%, #10b981 100%)", // Blue to Green
+        "glass-gradient": "linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%)",
+        "active-gradient": "linear-gradient(90deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0) 100%)", // Green tint
       },
       boxShadow: {
-        "blue-glow": "0 0 20px rgba(59, 130, 246, 0.5)",
-        "green-glow": "0 0 20px rgba(16, 185, 129, 0.5)",
-        "neon-blue": "0 0 10px rgba(0, 217, 255, 0.8)",
-        "neon-green": "0 0 10px rgba(0, 255, 136, 0.8)",
+        "blue-glow": "0 0 20px rgba(59, 130, 246, 0.3)",
+        "green-glow": "0 0 20px rgba(16, 185, 129, 0.3)",
+        "glass": "0 4px 30px rgba(0, 0, 0, 0.1)",
+        "neon": "0 0 5px theme('colors.blue.500'), 0 0 20px theme('colors.blue.900')",
       },
-      animation: {
-        "pulse-slow": "pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "glow": "glow 2s ease-in-out infinite alternate",
-        "bounce": "bounce 1s ease-in-out infinite",
-      },
-      keyframes: {
-        glow: {
-          "0%": { boxShadow: "0 0 5px rgba(59, 130, 246, 0.5)" },
-          "100%": { boxShadow: "0 0 20px rgba(59, 130, 246, 0.8)" },
-        },
-        "glow-green": {
-          "0%": { boxShadow: "0 0 5px rgba(16, 185, 129, 0.5)" },
-          "100%": { boxShadow: "0 0 20px rgba(16, 185, 129, 0.8)" },
-        },
-      },
+      backdropBlur: {
+        'xs': '2px',
+      }
     },
   },
   plugins: [],
 };
 export default config;
-
-

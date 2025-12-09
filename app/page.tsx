@@ -9,246 +9,362 @@ import {
   BarChart3,
   Globe,
   ArrowRight,
+  CheckCircle,
+  Smartphone,
+  CreditCard
 } from "lucide-react";
+import LandingTerminal from "@/components/LandingTerminal";
 
 export default function LandingPage() {
+  const stats = [
+    { value: "$12B+", label: "Quarterly Volume" },
+    { value: "2M+", label: "Verified Users" },
+    { value: "150+", label: "Countries Supported" },
+    { value: "<50ms", label: "Latency Speed" },
+  ];
+
   const features = [
     {
       icon: TrendingUp,
-      title: "Real-Time Trading",
-      description: "Execute trades with real-time market data and instant order execution.",
+      title: "Advanced Trading Engine",
+      description: "Execute orders with institutional-grade speed and precision using our proprietary matching engine.",
+      color: "text-emerald-400"
     },
     {
       icon: Shield,
-      title: "Secure Platform",
-      description: "Bank-level security with encryption and two-factor authentication.",
+      title: "Bank-Grade Security",
+      description: "Your assets are protected by cold storage, multi-sig wallets, and real-time threat monitoring.",
+      color: "text-sky-400"
     },
     {
       icon: Zap,
-      title: "Lightning Fast",
-      description: "Ultra-low latency trading platform built for speed and performance.",
+      title: "Lightning Execution",
+      description: "Experience zero-lag trading with our distributed global server network optimized for high frequency.",
+      color: "text-yellow-400"
     },
     {
       icon: BarChart3,
-      title: "Advanced Analytics",
-      description: "Comprehensive charts, indicators, and market analysis tools.",
+      title: "Pro Analytics Suite",
+      description: "Access Level 2 market data, custom indicators, and automated technical analysis tools.",
+      color: "text-purple-400"
+    },
+    {
+      icon: Smartphone,
+      title: "Mobile Native",
+      description: "Trade anywhere with our award-winning mobile app, fully synced with your desktop experience.",
+      color: "text-pink-400"
     },
     {
       icon: Globe,
-      title: "Global Markets",
-      description: "Access stocks, ETFs, and options from markets worldwide.",
+      title: "Global Access",
+      description: "Trade stocks, crypto, forex, and commodities from a single unified account.",
+      color: "text-blue-400"
     },
-    {
-      icon: TrendingUp,
-      title: "Portfolio Management",
-      description: "Track your investments and optimize your portfolio performance.",
-    },
-  ];
-
-  const stats = [
-    { value: "1M+", label: "Active Users" },
-    { value: "$50B+", label: "Trading Volume" },
-    { value: "99.9%", label: "Uptime" },
-    { value: "150+", label: "Countries" },
   ];
 
   return (
-    <div className="min-h-screen bg-dark-bg">
-      {/* Navigation */}
-      <nav className="sticky top-0 z-50 w-full border-b border-dark-border bg-dark-card/80 backdrop-blur-md">
-        <div className="flex h-14 sm:h-16 items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-green-blue-gradient shadow-green-glow">
-              <TrendingUp className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
+    <div className="min-h-screen bg-dark-bg text-gray-200 overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
+
+      {/* Navbar with Glass Effect */}
+      <nav className="fixed top-0 z-50 w-full border-b border-white/5 bg-dark-bg/80 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-emerald-500 shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-all">
+                <TrendingUp className="h-5 w-5 text-white" />
+              </div>
+              <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                QUANTUM
+              </span>
+            </Link>
+
+            <div className="flex items-center gap-4">
+              <Link
+                href="/signin"
+                className="hidden sm:inline-block text-sm font-medium text-gray-400 hover:text-white transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/signin"
+                className="px-5 py-2.5 rounded-full bg-gradient-to-r from-sky-500 to-emerald-500 text-white text-sm font-bold shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:scale-105 transition-all active:scale-95"
+              >
+                Get Started
+              </Link>
             </div>
-            <span className="text-base sm:text-xl font-bold text-blue-accent">QUANTUM AUSTRADE</span>
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-4">
-            <Link
-              href="/signin"
-              className="text-sm sm:text-base text-blue-accent hover:text-blue-primary transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="/signin"
-              className="px-3 sm:px-4 py-2 rounded-lg bg-green-blue-gradient text-white text-sm sm:text-base font-medium hover:shadow-green-glow transition-all"
-            >
-              Get Started
-            </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 sm:px-6 py-12 sm:py-20 lg:py-32">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 overflow-hidden">
+        {/* Background Decorative Elements */}
+        <motion.div
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] bg-sky-500/20 rounded-full blur-[120px] -z-10"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.2, 0.4, 0.2],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+          className="absolute bottom-0 right-0 w-[800px] h-[600px] bg-emerald-500/10 rounded-full blur-[100px] -z-10"
+        />
+
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center"
+            initial="hidden"
+            animate="show"
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.15
+                }
+              }
+            }}
           >
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-6"
+            <motion.div
+              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-sm"
             >
-              Trade Smarter,{" "}
-              <span className="bg-green-blue-gradient bg-clip-text text-transparent">
-                Invest Better
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-medium text-emerald-400 tracking-wide uppercase">Live Market Access v2.0</span>
+            </motion.div>
+
+            <motion.h1
+              variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0 } }}
+              className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 leading-tight"
+            >
+              The Future of <br className="hidden md:block" />
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-sky-400 via-emerald-400 to-cyan-400 drop-shadow-sm">
+                Decentralized Trading
               </span>
             </motion.h1>
+
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg sm:text-xl md:text-2xl text-blue-accent/70 mb-6 sm:mb-8 max-w-3xl mx-auto px-4"
+              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+              className="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl mx-auto leading-relaxed"
             >
-              The modern trading platform designed for both beginners and professionals.
-              Access real-time market data, advanced analytics, and seamless trading
-              experience.
+              Experience the next evolution of financial markets. Zero fees, lightning-fast execution, and bank-grade security for your digital assets.
             </motion.p>
+
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
               className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <Link
                 href="/signin"
-                className="group flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-green-blue-gradient text-white font-semibold text-base sm:text-lg hover:shadow-green-glow transition-all w-full sm:w-auto justify-center"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-sky-500 to-emerald-500 text-white font-bold text-lg shadow-xl shadow-emerald-500/20 hover:shadow-emerald-500/40 hover:-translate-y-1 transition-all"
               >
-                Start Trading Now
-                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5 group-hover:translate-x-1 transition-transform" />
+                Start Trading Free
               </Link>
               <Link
                 href="/markets"
-                className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg border border-dark-border bg-dark-card text-blue-accent font-semibold text-base sm:text-lg hover:border-blue-primary hover:bg-dark-hover transition-all w-full sm:w-auto text-center"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/5 border border-white/10 text-white font-bold text-lg hover:bg-white/10 backdrop-blur-sm transition-all flex items-center justify-center gap-2 group"
               >
-                Explore Markets
+                View Markets
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
+            </motion.div>
+
+            <motion.div
+              variants={{ hidden: { opacity: 0 }, show: { opacity: 1 } }}
+              className="mt-12 flex items-center justify-center gap-6 text-sm text-gray-500"
+            >
+              <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-500" /> No Credit Card Required</div>
+              <div className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-emerald-500" /> $10k Demo Account</div>
             </motion.div>
           </motion.div>
         </div>
 
-        {/* Background Gradient */}
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-blue-dark/20 via-transparent to-transparent"></div>
+        {/* Terminal Section with Glow */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.8, type: "spring" }}
+          className="mt-20 max-w-5xl mx-auto relative z-20 group"
+        >
+          {/* Glow Effect behind terminal */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-sky-500 to-emerald-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
+
+          <div className="relative">
+            <LandingTerminal />
+          </div>
+        </motion.div>
       </section>
 
-      {/* Stats Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 border-y border-dark-border">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            {stats.map((stat, index) => (
+      {/* Stats Strip */}
+      <section className="border-y border-white/5 bg-white/[0.02] backdrop-blur-sm relative z-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <motion.div
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: { staggerChildren: 0.2 }
+              }
+            }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8"
+          >
+            {stats.map((stat, i) => (
               <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 + index * 0.1 }}
+                key={i}
+                variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
                 className="text-center"
               >
-                <div className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-sm sm:text-base text-blue-accent/70">{stat.label}</div>
+                <h4 className="text-3xl md:text-4xl font-bold text-white mb-1">{stat.value}</h4>
+                <p className="text-sm font-medium text-emerald-400 uppercase tracking-wider">{stat.label}</p>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-20">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12 sm:mb-16"
-          >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-              Everything You Need to Trade
-            </h2>
-            <p className="text-lg sm:text-xl text-blue-accent/70 max-w-2xl mx-auto">
-              Powerful tools and features to help you make informed trading decisions
-            </p>
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="rounded-lg border border-dark-border bg-dark-card p-5 sm:p-6 hover:border-blue-primary hover:shadow-blue-glow transition-all"
-                >
-                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-blue-gradient mb-4">
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
-                  </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-blue-accent mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm sm:text-base text-blue-accent/70">{feature.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-20">
-        <div className="max-w-4xl mx-auto">
+      {/* Features Grid */}
+      <section className="py-24 px-4 relative">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-6">Built for <span className="text-emerald-400">Professional</span> Traders</h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">Everything you need to analyze, execute, and scale your portfolio in one unified ecosystem.</p>
+          </div>
+
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="rounded-2xl border border-dark-border bg-dark-card p-8 sm:p-12 text-center relative overflow-hidden"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: { staggerChildren: 0.1 }
+              }
+            }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            <div className="absolute inset-0 bg-green-blue-gradient opacity-10"></div>
-            <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
-                Ready to Start Trading?
-              </h2>
-              <p className="text-lg sm:text-xl text-blue-accent/70 mb-6 sm:mb-8 max-w-2xl mx-auto">
-                Join thousands of traders and investors who trust QUANTUM AUSTRADE for their
-                trading needs.
-              </p>
-              <Link
-                href="/signin"
-                className="inline-flex items-center gap-2 px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-green-blue-gradient text-white font-semibold text-base sm:text-lg hover:shadow-green-glow transition-all"
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0 } }}
+                className="glass-card p-8 group hover:-translate-y-2 hover:bg-white/[0.03] transition-all duration-300 border border-white/5 hover:border-emerald-500/20"
               >
-                Create Free Account
-                <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
-              </Link>
-            </div>
+                <div className={`w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:bg-gradient-to-br group-hover:from-white/10 group-hover:to-transparent transition-all ${feature.color}`}>
+                  <feature.icon className="w-7 h-7" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors">{feature.title}</h3>
+                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Trust / CTA Section */}
+      <section className="py-24 px-4">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="relative rounded-3xl border border-white/10 bg-gradient-to-br from-white/5 to-transparent p-12 md:p-20 text-center overflow-hidden"
+          >
+            {/* Radial Glow */}
+            <motion.div
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/20 blur-[120px] rounded-full -z-10"
+            />
+
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Ready to maximize your returns?</h2>
+            <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">Join the fastest growing decentralized exchange platform today. Setup takes less than 2 minutes.</p>
+
+            <Link
+              href="/signin"
+              className="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-white text-emerald-950 font-bold text-lg hover:bg-gray-100 transform hover:scale-105 transition-all shadow-xl"
+            >
+              Create Free Account
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <p className="mt-6 text-sm text-gray-500">Join 2M+ users • No credit card required</p>
           </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-dark-border bg-dark-card px-4 sm:px-6 py-8 sm:py-12">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-blue-gradient">
+      <footer className="border-t border-white/5 bg-black/40 pt-16 pb-8 px-4">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+          <div className="col-span-2 lg:col-span-2">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-sky-500 to-emerald-500">
                 <TrendingUp className="h-5 w-5 text-white" />
               </div>
-              <span className="text-base sm:text-lg font-bold text-blue-accent">QUANTUM AUSTRADE</span>
-            </Link>
-            <div className="text-xs sm:text-sm text-blue-accent/70">
-              © 2024 QUANTUM AUSTRADE. All rights reserved.
+              <span className="text-xl font-bold text-white">QUANTUM</span>
             </div>
+            <p className="text-gray-400 max-w-sm mb-6">The world's most trusted social trading platform. Connect, trade, and grow your wealth with advanced tools and community insights.</p>
+            <div className="flex gap-4">
+              {/* Social placeholders */}
+              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white cursor-pointer transition-colors"><Globe className="w-5 h-5" /></div>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="font-bold text-white mb-4">Platform</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li className="hover:text-emerald-400 cursor-pointer">Markets</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Live Trading</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Copy Trading</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Earn</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-white mb-4">Support</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li className="hover:text-emerald-400 cursor-pointer">Help Center</li>
+              <li className="hover:text-emerald-400 cursor-pointer">API Documentation</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Fees</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Security</li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold text-white mb-4">Company</h4>
+            <ul className="space-y-2 text-gray-400">
+              <li className="hover:text-emerald-400 cursor-pointer">About Us</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Careers</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Blog</li>
+              <li className="hover:text-emerald-400 cursor-pointer">Contact</li>
+            </ul>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+          <p>&copy; 2024 Quantum Austrade. All rights reserved.</p>
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-white cursor-pointer">Terms of Service</span>
           </div>
         </div>
       </footer>
     </div>
   );
 }
-
-

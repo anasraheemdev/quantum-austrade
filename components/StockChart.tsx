@@ -12,9 +12,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  ReferenceLine,
 } from "recharts";
-import { motion } from "framer-motion";
 import { StockHistory } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 
@@ -24,19 +22,93 @@ interface StockChartProps {
 
 type ChartType = "line" | "candlestick" | "volume";
 
-export default function StockChart({ history }: StockChartProps) {
-  const [chartType, setChartType] = useState<ChartType>("line");
+const CustomCandle = (props: any) => {
+  const { x, y, width, height, payload, xAxis, yAxis } = props;
 
-  // Validate and format data for charts
+  // Safety check
+  if (!payload || payload.open === undefined || payload.close === undefined || payload.high === undefined || payload.low === undefined) {
+    return null;
+  }
+
+  const { open, close, high, low } = payload;
+  const isUp = close >= open;
+  const color = isUp ? "#10b981" : "#ef4444"; // Emerald vs Red
+
+  // Calculate coordinates using axis scales
+  // Recharts passes us the pre-calculated x and y (top of bar). 
+  // But for a candle we need precise Y coordinates for O/C/H/L.
+  // We can use the yAxis.scale() function if available, or rely on the payload passing processed data?
+  // Actually, standard Recharts custom shapes receive the *view* coordinates if we map them correctly.
+
+  // HOWEVER, getting pixel values inside a random shape is tricky without context.
+  // TRICK: We pass the exact O/C/H/L pixel values in the data? No.
+
+  // BETTER APPROACH:
+  // We use the `yAxis` scale function which is passed in `props` (often implicit in Customized, but maybe not in Shape).
+  // If `yAxis` is not passed, we have a problem.
+
+  // ALTERNATIVE:
+  // We calculate the localized height ratio.
+  // The `y` prop given is the top of the "bar" (min value).
+  // The `height` is the total height of the bar.
+  // If we map the dataKey to [low, high], then `y` is `high` (screen coords) and `y + height` is `low`.
+
+  // Let's assume we map the Bar to `[low, high]`.
+  // y = pixel(high)
+  // height = pixel(low) - pixel(high)
+
+  // We need to find pixel(open) and pixel(close).
+  // ratio = height / (high - low)
+  // pixel(val) = y + (high - val) * ratio
+
+  const range = high - low;
+  const ratio = range === 0 ? 0 : height / range;
+
+  const yHigh = y;
+  const yLow = y + height;
+  const yOpen = y + (high - open) * ratio;
+  const yClose = y + (high - close) * ratio;
+
+  // Wick x-position (center of candle)
+  const xCenter = x + width / 2;
+
+  // Body logic
+  const bodyTop = Math.min(yOpen, yClose);
+  const bodyHeight = Math.max(1, Math.abs(yOpen - yClose)); // Ensure at least 1px
+
+  return (
+    <g>
+      {/* Wick (Line from High to Low) */}
+      <line
+        x1={xCenter} y1={yHigh}
+        x2={xCenter} y2={yLow}
+        stroke={color}
+        strokeWidth={1}
+      />
+      {/* Body (Rect from Open to Close) */}
+      <rect
+        x={x + 1}
+        y={bodyTop}
+        width={Math.max(1, width - 2)}
+        height={bodyHeight}
+        fill={color}
+        stroke={color} // Fill matches stroke 
+      />
+    </g>
+  );
+};
+
+export default function StockChart({ history }: StockChartProps) {
+  const [chartType, setChartType] = useState<ChartType>("candlestick"); // Default to candle
+
   if (!history || !history.lineData || !history.candleData) {
     return (
-      <div className="rounded-lg border border-dark-border bg-dark-card p-6">
-        <p className="text-red-400">No chart data available</p>
+      <div className="rounded-lg border border-dark-border bg-dark-card p-6 flex items-center justify-center h-80">
+        <p className="text-gray-500">Wait for market data...</p>
       </div>
     );
   }
 
-  // Format data for charts with error handling
   const lineData = (history.lineData || []).map((item) => {
     try {
       const date = item.date ? new Date(item.date) : new Date();
@@ -44,226 +116,124 @@ export default function StockChart({ history }: StockChartProps) {
         date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
         price: Number(item.price) || 0,
       };
-    } catch (error) {
-      return {
-        date: "Invalid",
-        price: 0,
-      };
-    }
-  }).filter(item => item.price > 0);
+    } catch (e) { return null; }
+  }).filter(Boolean);
 
   const candleData = (history.candleData || []).map((item) => {
     try {
       const date = item.date ? new Date(item.date) : new Date();
-      const isUp = (item.close || 0) >= (item.open || 0);
+      const open = Number(item.open) || 0;
+      const close = Number(item.close) || 0;
+
+      // We need [low, high] for the Bar dataKey to establish the main drawing range
+      const low = Number(item.low) || Math.min(open, close);
+      const high = Number(item.high) || Math.max(open, close);
+
       return {
         date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-        open: Number(item.open) || 0,
-        high: Number(item.high) || 0,
-        low: Number(item.low) || 0,
-        close: Number(item.close) || 0,
-        bodyTop: Math.max(item.open || 0, item.close || 0),
-        bodyBottom: Math.min(item.open || 0, item.close || 0),
-        bodyHeight: Math.abs((item.close || 0) - (item.open || 0)),
-        isUp,
+        open,
+        close,
+        high,
+        low,
+        // Used for the range mapping
+        range: [low, high]
       };
-    } catch (error) {
-      return {
-        date: "Invalid",
-        open: 0,
-        high: 0,
-        low: 0,
-        close: 0,
-        bodyTop: 0,
-        bodyBottom: 0,
-        bodyHeight: 0,
-        isUp: false,
-      };
-    }
-  }).filter(item => item.close > 0);
+    } catch (e) { return null; }
+  }).filter(Boolean);
 
   const volumeData = (history.candleData || []).map((item) => {
     try {
       const date = item.date ? new Date(item.date) : new Date();
       return {
         date: date.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-        volume: (Number(item.volume) || 0) / 1000000, // Convert to millions
+        volume: (Number(item.volume) || 0) / 1000000,
       };
-    } catch (error) {
-      return {
-        date: "Invalid",
-        volume: 0,
-      };
-    }
-  }).filter(item => item.volume > 0);
-
-  // Show message if no valid data
-  if (lineData.length === 0 && candleData.length === 0) {
-    return (
-      <div className="rounded-lg border border-dark-border bg-dark-card p-6">
-        <p className="text-red-400">No valid chart data available</p>
-      </div>
-    );
-  }
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-dark-card border border-dark-border rounded-lg p-3 shadow-lg">
-          <p className="text-blue-accent mb-2">{label}</p>
-          {payload.map((entry: any, index: number) => (
-            <p key={index} className="text-white" style={{ color: entry.color }}>
-              {entry.name}: {formatCurrency(entry.value)}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
+    } catch (e) { return null; }
+  }).filter(Boolean);
 
   return (
-    <div className="rounded-lg border border-dark-border bg-dark-card p-6">
-      {/* Chart Type Selector */}
-      <div className="flex gap-2 mb-4 sm:mb-6 overflow-x-auto scrollbar-hide pb-2">
+    <div className="rounded-lg border border-dark-border bg-dark-card p-6 shadow-xl">
+      <div className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide pb-2">
         {(["line", "candlestick", "volume"] as ChartType[]).map((type) => (
           <button
             key={type}
             onClick={() => setChartType(type)}
-            className={`px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all whitespace-nowrap flex-shrink-0 ${
-              chartType === type
-                ? "bg-blue-gradient text-white shadow-blue-glow"
-                : "bg-dark-hover text-blue-accent hover:text-blue-primary"
-            }`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${chartType === type
+                ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/50"
+                : "text-gray-400 hover:text-white hover:bg-white/5"
+              }`}
           >
             {type.charAt(0).toUpperCase() + type.slice(1)}
           </button>
         ))}
       </div>
 
-      {/* Chart Container */}
-      <div className="h-64 sm:h-80 lg:h-96">
+      <div className="h-80 w-full">
         <ResponsiveContainer width="100%" height="100%">
           {chartType === "line" ? (
             <LineChart data={lineData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a2332" />
-              <XAxis
-                dataKey="date"
-                stroke="#93c5fd"
-                tick={{ fill: "#93c5fd" }}
-                tickCount={10}
-              />
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+              <XAxis dataKey="date" stroke="#666" tick={{ fill: "#666", fontSize: 12 }} tickMargin={10} />
               <YAxis
-                stroke="#93c5fd"
-                tick={{ fill: "#93c5fd" }}
-                domain={["dataMin - 5", "dataMax + 5"]}
+                stroke="#666"
+                tick={{ fill: "#666", fontSize: 12 }}
+                domain={["auto", "auto"]}
+                tickFormatter={(val) => `$${val}`}
               />
-              <Tooltip content={<CustomTooltip />} />
-              <Line
-                type="monotone"
-                dataKey="price"
-                stroke="#3b82f6"
-                strokeWidth={2}
-                dot={false}
-                activeDot={{ r: 6, fill: "#60a5fa" }}
+              <Tooltip
+                contentStyle={{ backgroundColor: "#000", borderColor: "#333", color: "#fff" }}
+                itemStyle={{ color: "#3b82f6" }}
               />
+              <Line type="monotone" dataKey="price" stroke="#0ea5e9" strokeWidth={2} dot={false} activeDot={{ r: 6, fill: "#fff" }} />
             </LineChart>
           ) : chartType === "candlestick" ? (
-            <ComposedChart data={candleData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a2332" />
-              <XAxis
-                dataKey="date"
-                stroke="#93c5fd"
-                tick={{ fill: "#93c5fd" }}
-                tickCount={10}
-              />
+            <BarChart data={candleData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+              <XAxis dataKey="date" stroke="#666" tick={{ fill: "#666", fontSize: 12 }} tickMargin={10} />
               <YAxis
-                stroke="#93c5fd"
-                tick={{ fill: "#93c5fd" }}
-                domain={["dataMin - 5", "dataMax + 5"]}
+                stroke="#666"
+                tick={{ fill: "#666", fontSize: 12 }}
+                domain={["auto", "auto"]}
+                tickFormatter={(val) => `$${val}`}
               />
               <Tooltip
                 content={({ active, payload, label }) => {
                   if (active && payload && payload.length) {
-                    const data = payload[0].payload;
+                    const d = payload[0].payload;
+                    const isUp = d.close >= d.open;
                     return (
-                      <div className="bg-dark-card border border-dark-border rounded-lg p-3 shadow-lg">
-                        <p className="text-blue-accent mb-2">{label}</p>
-                        <p className="text-white">Open: {formatCurrency(data.open)}</p>
-                        <p className="text-white">High: {formatCurrency(data.high)}</p>
-                        <p className="text-white">Low: {formatCurrency(data.low)}</p>
-                        <p className="text-white">Close: {formatCurrency(data.close)}</p>
+                      <div className="bg-black/90 border border-white/10 rounded-lg p-3 shadow-2xl backdrop-blur-md">
+                        <p className="text-gray-400 text-xs mb-2">{label}</p>
+                        <div className="space-y-1 font-mono text-xs">
+                          <div className="flex justify-between gap-4"><span className="text-gray-500">Open:</span> <span className="text-white">{d.open}</span></div>
+                          <div className="flex justify-between gap-4"><span className="text-gray-500">High:</span> <span className="text-white">{d.high}</span></div>
+                          <div className="flex justify-between gap-4"><span className="text-gray-500">Low:</span> <span className="text-white">{d.low}</span></div>
+                          <div className="flex justify-between gap-4"><span className="text-gray-500">Close:</span> <span className={isUp ? "text-emerald-400" : "text-red-400"}>{d.close}</span></div>
+                        </div>
                       </div>
                     );
                   }
                   return null;
                 }}
               />
-              {/* High line */}
-              <Line
-                type="monotone"
-                dataKey="high"
-                stroke="#60a5fa"
-                strokeWidth={1}
-                dot={false}
-                connectNulls
+              {/* 
+                  The Key Trick: 
+                  We bind the Bar to the [low, high] range so Recharts calculates the Y and Height for the full vertical length of the candle.
+                  Then our CustomCandle shape draws the Wick and Body inside that box.
+               */}
+              <Bar
+                dataKey="range"
+                shape={<CustomCandle />}
               />
-              {/* Low line */}
-              <Line
-                type="monotone"
-                dataKey="low"
-                stroke="#60a5fa"
-                strokeWidth={1}
-                dot={false}
-                connectNulls
-              />
-              {/* Open price line */}
-              <Line
-                type="monotone"
-                dataKey="open"
-                stroke="#ef4444"
-                strokeWidth={2}
-                dot={false}
-                connectNulls
-              />
-              {/* Close price line */}
-              <Line
-                type="monotone"
-                dataKey="close"
-                stroke="#22c55e"
-                strokeWidth={2}
-                dot={false}
-                connectNulls
-              />
-            </ComposedChart>
+            </BarChart>
           ) : (
             <BarChart data={volumeData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1a2332" />
-              <XAxis
-                dataKey="date"
-                stroke="#93c5fd"
-                tick={{ fill: "#93c5fd" }}
-                tickCount={10}
-              />
-              <YAxis
-                stroke="#93c5fd"
-                tick={{ fill: "#93c5fd" }}
-                label={{ value: "Volume (M)", angle: -90, position: "insideLeft", fill: "#93c5fd" }}
-              />
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
+              <XAxis dataKey="date" stroke="#666" tick={{ fill: "#666", fontSize: 12 }} />
+              <YAxis stroke="#666" tick={{ fill: "#666", fontSize: 12 }} />
               <Tooltip
-                content={({ active, payload }) => {
-                  if (active && payload && payload.length) {
-                    return (
-                      <div className="bg-dark-card border border-dark-border rounded-lg p-3 shadow-lg">
-                        <p className="text-blue-accent mb-2">{payload[0].payload.date}</p>
-                        <p className="text-white">
-                          Volume: {(payload[0].value as number).toFixed(2)}M
-                        </p>
-                      </div>
-                    );
-                  }
-                  return null;
-                }}
+                cursor={{ fill: 'transparent' }}
+                contentStyle={{ backgroundColor: "#000", borderColor: "#333", color: "#fff" }}
               />
               <Bar dataKey="volume" fill="#3b82f6" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -273,4 +243,3 @@ export default function StockChart({ history }: StockChartProps) {
     </div>
   );
 }
-
