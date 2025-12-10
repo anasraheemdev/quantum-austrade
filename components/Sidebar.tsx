@@ -30,7 +30,7 @@ const publicMenuItems = [
 // Protected menu items (only visible when authenticated)
 const protectedMenuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard", requiresAuth: true },
-  { icon: CandlestickChart, label: "Execute Trade", href: "/trade", requiresAuth: true },
+  { icon: CandlestickChart, label: "Trade", href: "/trade", requiresAuth: true },
   { icon: History, label: "Trade History", href: "/transactions", requiresAuth: true },
   { icon: User, label: "Profile", href: "/profile", requiresAuth: true },
 ];
@@ -125,8 +125,8 @@ export default function Sidebar({ isOpen: controlledIsOpen, onClose }: SidebarPr
                   }
                 }}
                 className={`group flex items-center gap-3 rounded-r-full mr-2 px-4 py-3 transition-all duration-200 relative overflow-hidden ${isActive
-                    ? "bg-active-gradient text-green-400 border-l-2 border-green-500" // Green Highlight
-                    : "text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent"
+                  ? "bg-active-gradient text-green-400 border-l-2 border-green-500" // Green Highlight
+                  : "text-gray-400 hover:text-white hover:bg-white/5 border-l-2 border-transparent"
                   }`}
               >
                 <Icon className={`h-5 w-5 flex-shrink-0 transition-transform group-hover:scale-105 ${isActive ? 'text-green-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'text-gray-500 group-hover:text-white'}`} />

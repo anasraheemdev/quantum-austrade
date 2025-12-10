@@ -85,6 +85,23 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Failed to create trade session" }, { status: 500 });
         }
 
+        // Create transaction record for trade start
+        const { error: transactionError } = await supabase
+            .from("transactions")
+            .insert({
+                user_id: user.id,
+                symbol: symbol,
+                type: 'buy', // Using 'buy' to indicate trade start
+                quantity: 1, // For binary options, quantity is always 1
+                price: amount,
+                total_amount: amount,
+            });
+
+        if (transactionError) {
+            console.error("Transaction creation error:", transactionError);
+            // Don't fail the trade if transaction logging fails
+        }
+
         return NextResponse.json({ success: true, session, newBalance });
 
     } catch (error) {

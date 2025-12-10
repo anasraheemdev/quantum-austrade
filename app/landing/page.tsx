@@ -243,7 +243,7 @@ export default function LandingPage() {
               <span className="text-lg font-bold text-blue-accent">QUANTUM AUSTRADE</span>
             </div>
             <div className="text-blue-accent/70 text-sm">
-              © 2024 QUANTUM AUSTRADE. All rights reserved.
+              © 2025 QUANTUM AUSTRADE. All rights reserved.
             </div>
           </div>
         </div>

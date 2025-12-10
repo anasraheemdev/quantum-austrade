@@ -70,8 +70,8 @@ export default function TradePage() {
                             animate={{ opacity: 1, y: 0 }}
                             className="mb-8"
                         >
-                            <h1 className="text-3xl font-bold text-white mb-4">Execute Trade</h1>
-                            <p className="text-gray-400 mb-6">Access global markets and execute trades instantly.</p>
+                            <h1 className="text-3xl font-bold text-white mb-4">Trade</h1>
+                            <p className="text-gray-400 mb-6">Execute time-based trades on global markets.</p>
 
                             {/* Search Bar */}
                             <div className="relative max-w-md">
@@ -87,12 +87,12 @@ export default function TradePage() {
                         </motion.div>
 
                         {/* Info Banner */}
-                        <div className="flex items-start gap-3 p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl mb-8">
-                            <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-3 p-4 bg-purple-500/10 border border-purple-500/20 rounded-xl mb-8">
+                            <Info className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
                             <div>
-                                <h3 className="text-blue-400 font-bold text-sm">Trading Session Active</h3>
-                                <p className="text-sm text-blue-300/70 mt-1">
-                                    You can place <b>Standard</b> (Limit/Market) orders or <b>Time-based</b> trades managed by admins.
+                                <h3 className="text-purple-400 font-bold text-sm">Time-Based Trading</h3>
+                                <p className="text-sm text-purple-300/70 mt-1">
+                                    Select an asset, choose your duration and amount, and let the admin manage your trade outcome. Potential 80% profit on wins!
                                 </p>
                             </div>
                         </div>

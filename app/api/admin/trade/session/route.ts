@@ -124,7 +124,31 @@ export async function POST(request: NextRequest) {
                     .from("users")
                     .update({ account_balance: newBalance })
                     .eq("id", session.user_id);
+
+                // Create transaction record for WIN
+                await adminClient
+                    .from("transactions")
+                    .insert({
+                        user_id: session.user_id,
+                        symbol: session.symbol,
+                        type: 'sell', // Using 'sell' to indicate trade completion/win
+                        quantity: 1,
+                        price: payout,
+                        total_amount: payout,
+                    });
             }
+        } else {
+            // For LOSS, create transaction record showing the loss
+            await adminClient
+                .from("transactions")
+                .insert({
+                    user_id: session.user_id,
+                    symbol: session.symbol,
+                    type: 'sell', // Using 'sell' to indicate trade completion/loss
+                    quantity: 1,
+                    price: 0, // Loss means 0 return
+                    total_amount: 0,
+                });
         }
 
         return NextResponse.json({ success: true, status, newPrice });

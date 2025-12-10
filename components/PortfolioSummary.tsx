@@ -29,8 +29,8 @@ export default function PortfolioSummary({ portfolio }: PortfolioSummaryProps) {
   // Since we haven't updated the 'Portfolio' type fetcher in `dashboard/page.tsx`, we might need to rely on what's available or defaults.
   // Ideally, `dashboard/page.tsx` should fetch user profile for score/level.
   // For this step, I will add visual placeholders that would assume data presence.
-  const creditScore = (portfolio as any).creditScore || 100; // Default
-  const level = (portfolio as any).level || 1; // Default
+  const creditScore = (portfolio as any).creditScore || 1; // Default to 1 now
+  const level = (portfolio as any).level || 1; // Default to 1
 
   return (
     <>
@@ -86,8 +86,12 @@ export default function PortfolioSummary({ portfolio }: PortfolioSummaryProps) {
             </div>
           </div>
           <div className="mt-2">
-            <div className="text-white font-medium text-sm">Excellent Standing</div>
-            <div className="text-xs text-green-400 mt-1">Top 10% of Traders</div>
+            <div className="text-white font-medium text-sm">
+              {creditScore >= 80 ? 'Excellent Standing' : creditScore >= 50 ? 'Good Standing' : creditScore >= 20 ? 'Fair Standing' : 'Building Credit'}
+            </div>
+            <div className={`text-xs mt-1 ${creditScore >= 80 ? 'text-green-400' : creditScore >= 50 ? 'text-blue-400' : 'text-yellow-400'}`}>
+              {creditScore >= 80 ? 'Top 10% of Traders' : creditScore >= 50 ? 'Above Average' : 'Keep Trading'}
+            </div>
           </div>
         </motion.div>
 

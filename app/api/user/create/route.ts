@@ -34,9 +34,9 @@ export async function POST(request: NextRequest) {
     if (existingUser) {
       // User already exists, return success
       console.log("User profile already exists:", userId);
-      return NextResponse.json({ 
+      return NextResponse.json({
         message: "User already exists",
-        user: existingUser 
+        user: existingUser
       });
     }
 
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     // Create user profile
     console.log("Attempting to insert user profile:", { userId, email, name });
     console.log("User ID type:", typeof userId, "Value:", userId);
-    
+
     // Ensure userId is a valid UUID string
     if (typeof userId !== 'string' || !userId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i)) {
       return NextResponse.json(
@@ -56,10 +56,10 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
+
     // Generate unique user ID
     const uniqueId = `USER${Math.floor(100000 + Math.random() * 900000)}`;
-    
+
     const { data: newUser, error: insertError } = await supabase
       .from("users")
       .insert({
@@ -72,6 +72,8 @@ export async function POST(request: NextRequest) {
         member_since: new Date().toISOString(),
         unique_user_id: uniqueId,
         role: 'client', // Explicitly set role to 'client' for new users
+        credit_score: 1, // Initial credit score
+        level: 1, // Initial level
       })
       .select()
       .single();
@@ -82,10 +84,10 @@ export async function POST(request: NextRequest) {
       console.error("Error message:", insertError.message);
       console.error("Error details:", insertError.details);
       console.error("Error hint:", insertError.hint);
-      
+
       return NextResponse.json(
-        { 
-          error: "Failed to create user profile", 
+        {
+          error: "Failed to create user profile",
           details: insertError.message,
           code: insertError.code,
           hint: insertError.hint
@@ -95,7 +97,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log("✅ User profile created successfully:", newUser?.id);
-    
+
     // If admin access was requested, create an admin request
     if (requestAdminAccess) {
       try {
@@ -107,7 +109,7 @@ export async function POST(request: NextRequest) {
             name: name || email.split("@")[0] || "User",
             status: 'pending',
           });
-        
+
         if (requestError) {
           console.error("Error creating admin request:", requestError);
           // Don't fail the signup if admin request creation fails
@@ -119,8 +121,8 @@ export async function POST(request: NextRequest) {
         // Don't fail the signup if admin request creation fails
       }
     }
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       message: "User profile created successfully",
       user: newUser,
       adminRequestCreated: requestAdminAccess || false

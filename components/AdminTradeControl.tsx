@@ -24,6 +24,7 @@ export default function AdminTradeControl() {
     const { session } = useAuth();
     const [sessions, setSessions] = useState<TradeSession[]>([]);
     const [loading, setLoading] = useState(false);
+    const [confirmAction, setConfirmAction] = useState<{ sessionId: string, action: 'WIN' | 'LOSS' } | null>(null);
 
     // Chart State
     const [chartSymbol, setChartSymbol] = useState("BTC");
@@ -95,6 +96,10 @@ export default function AdminTradeControl() {
 
     const handleOutcome = async (sessionId: string, action: "WIN" | "LOSS") => {
         if (!session) return;
+
+        // Close confirmation dialog
+        setConfirmAction(null);
+
         try {
             const res = await fetch("/api/admin/trade/session", {
                 method: "POST",
@@ -193,15 +198,17 @@ export default function AdminTradeControl() {
 
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => handleOutcome(item.id, "LOSS")}
-                                            className="flex-1 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 rounded-md text-sm font-medium transition-all"
+                                            onClick={() => setConfirmAction({ sessionId: item.id, action: 'LOSS' })}
+                                            className="flex-1 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 rounded-md text-sm font-medium transition-all hover:scale-105"
                                         >
+                                            <XCircle className="w-4 h-4 inline mr-1" />
                                             Force Loss
                                         </button>
                                         <button
-                                            onClick={() => handleOutcome(item.id, "WIN")}
-                                            className="flex-1 px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 rounded-md text-sm font-medium transition-all"
+                                            onClick={() => setConfirmAction({ sessionId: item.id, action: 'WIN' })}
+                                            className="flex-1 px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 rounded-md text-sm font-medium transition-all hover:scale-105"
                                         >
+                                            <CheckCircle className="w-4 h-4 inline mr-1" />
                                             Force Win
                                         </button>
                                     </div>
@@ -287,6 +294,39 @@ export default function AdminTradeControl() {
                     </div>
                 </form>
             </div>
+
+            {/* Confirmation Dialog */}
+            {confirmAction && (
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-dark-card border border-dark-border rounded-xl p-6 max-w-md w-full shadow-2xl">
+                        <h3 className="text-xl font-bold text-white mb-4">
+                            Confirm Trade Outcome
+                        </h3>
+                        <p className="text-gray-300 mb-6">
+                            Are you sure you want to force this trade to <span className={confirmAction.action === 'WIN' ? 'text-green-400 font-bold' : 'text-red-400 font-bold'}>{confirmAction.action}</span>?
+                            {confirmAction.action === 'WIN' && ' The client will receive their investment plus 80% profit.'}
+                            {confirmAction.action === 'LOSS' && ' The client will lose their investment.'}
+                        </p>
+                        <div className="flex gap-3">
+                            <button
+                                onClick={() => setConfirmAction(null)}
+                                className="flex-1 px-4 py-2 bg-dark-hover border border-dark-border text-white rounded-lg font-medium hover:bg-dark-bg transition-all"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => handleOutcome(confirmAction.sessionId, confirmAction.action)}
+                                className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${confirmAction.action === 'WIN'
+                                        ? 'bg-green-500 hover:bg-green-600 text-white'
+                                        : 'bg-red-500 hover:bg-red-600 text-white'
+                                    }`}
+                            >
+                                Confirm {confirmAction.action}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -358,7 +358,7 @@ export default function LandingPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
-          <p>&copy; 2024 Quantum Austrade. All rights reserved.</p>
+          <p>&copy; 2025 Quantum Austrade. All rights reserved.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <span className="hover:text-white cursor-pointer">Privacy Policy</span>
             <span className="hover:text-white cursor-pointer">Terms of Service</span>

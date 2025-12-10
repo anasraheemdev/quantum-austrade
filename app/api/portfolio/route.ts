@@ -9,7 +9,7 @@ import path from "path";
 export async function GET(request: NextRequest) {
   try {
     const supabase = createServerClient();
-    
+
     // Get auth token from request
     const authHeader = request.headers.get("authorization");
     if (!authHeader) {
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     const token = authHeader.replace("Bearer ", "");
-    
+
     // Verify user token
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
 
@@ -29,10 +29,10 @@ export async function GET(request: NextRequest) {
     // Admin client ensures we get the most up-to-date balance after transfers
     const adminSupabase = tryCreateAdminClient();
     const clientToUse = adminSupabase || supabase;
-    
+
     const { data: userData } = await clientToUse
       .from("users")
-      .select("account_balance, total_invested")
+      .select("account_balance, total_invested, credit_score, level")
       .eq("id", user.id)
       .single();
 
@@ -57,6 +57,8 @@ export async function GET(request: NextRequest) {
         totalGain: 0,
         totalGainPercent: 0,
         watchlist: [],
+        creditScore: userData?.credit_score || 1,
+        level: userData?.level || 1,
       });
     }
 
@@ -64,7 +66,7 @@ export async function GET(request: NextRequest) {
     const filePath = path.join(process.cwd(), 'public', 'data', 'stocks.json');
     const fileContents = fs.readFileSync(filePath, 'utf8');
     const allStocks = JSON.parse(fileContents);
-    
+
     const priceMap = new Map<string, { price: number; name: string }>();
     positions.forEach((pos: any) => {
       const stock = allStocks.find((s: any) => s.symbol === pos.symbol);
@@ -72,9 +74,9 @@ export async function GET(request: NextRequest) {
         // Add slight variation for realism
         const variation = (Math.random() - 0.5) * 0.02;
         const price = stock.price * (1 + variation);
-        priceMap.set(pos.symbol, { 
-          price: Math.round(price * 100) / 100, 
-          name: stock.name 
+        priceMap.set(pos.symbol, {
+          price: Math.round(price * 100) / 100,
+          name: stock.name
         });
       } else {
         priceMap.set(pos.symbol, { price: pos.avg_price, name: pos.symbol });
@@ -115,6 +117,8 @@ export async function GET(request: NextRequest) {
       totalGain: totalGain,
       totalGainPercent: totalGainPercent,
       watchlist: [], // TODO: Fetch from watchlist table if needed
+      creditScore: userData?.credit_score || 1,
+      level: userData?.level || 1,
     });
   } catch (error) {
     console.error("Error fetching portfolio:", error);
