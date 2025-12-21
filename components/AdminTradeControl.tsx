@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatCurrency } from "@/lib/utils";
-import { Clock, CheckCircle, XCircle, RefreshCcw, UserCog, Trophy, TrendingUp } from "lucide-react";
+import { Clock, CheckCircle, XCircle, RefreshCcw, UserCog, Trophy, TrendingUp, Bell } from "lucide-react";
 import StockChart from "./StockChart";
 import { StockHistory } from "@/lib/types";
 
@@ -25,6 +25,8 @@ export default function AdminTradeControl() {
     const [sessions, setSessions] = useState<TradeSession[]>([]);
     const [loading, setLoading] = useState(false);
     const [confirmAction, setConfirmAction] = useState<{ sessionId: string, action: 'WIN' | 'LOSS' } | null>(null);
+    const [previousSessionCount, setPreviousSessionCount] = useState(0);
+    const [newTradeAlert, setNewTradeAlert] = useState(false);
 
     // Chart State
     const [chartSymbol, setChartSymbol] = useState("BTC");
@@ -45,6 +47,22 @@ export default function AdminTradeControl() {
             });
             if (res.ok) {
                 const data = await res.json();
+
+                // Check for new trades (more sessions than before)
+                if (data.length > previousSessionCount && previousSessionCount > 0) {
+                    setNewTradeAlert(true);
+                    // Play notification sound
+                    try {
+                        const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZURE');
+                        audio.volume = 0.5;
+                        audio.play().catch(() => { });
+                    } catch (e) { }
+
+                    // Clear alert after 5 seconds
+                    setTimeout(() => setNewTradeAlert(false), 5000);
+                }
+
+                setPreviousSessionCount(data.length);
                 setSessions(data);
                 // Pre-fill user ID if sessions exist
                 if (data.length > 0 && !targetUserId) {
@@ -90,7 +108,7 @@ export default function AdminTradeControl() {
 
     useEffect(() => {
         fetchSessions();
-        const interval = setInterval(fetchSessions, 5000); // Auto refresh
+        const interval = setInterval(fetchSessions, 3000); // Auto refresh every 3 seconds
         return () => clearInterval(interval);
     }, [session]);
 
@@ -317,8 +335,8 @@ export default function AdminTradeControl() {
                             <button
                                 onClick={() => handleOutcome(confirmAction.sessionId, confirmAction.action)}
                                 className={`flex-1 px-4 py-2 rounded-lg font-medium transition-all ${confirmAction.action === 'WIN'
-                                        ? 'bg-green-500 hover:bg-green-600 text-white'
-                                        : 'bg-red-500 hover:bg-red-600 text-white'
+                                    ? 'bg-green-500 hover:bg-green-600 text-white'
+                                    : 'bg-red-500 hover:bg-red-600 text-white'
                                     }`}
                             >
                                 Confirm {confirmAction.action}

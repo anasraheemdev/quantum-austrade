@@ -102,6 +102,33 @@ export async function POST(request: NextRequest) {
             // Don't fail the trade if transaction logging fails
         }
 
+        // Create notification for all admins about new trade
+        try {
+            // Get all admin users
+            const { data: admins } = await supabase
+                .from("users")
+                .select("id")
+                .eq("role", "admin");
+
+            if (admins && admins.length > 0) {
+                // Create notification for each admin
+                const notifications = admins.map(admin => ({
+                    user_id: admin.id,
+                    title: "New Trade Executed",
+                    message: `Client executed ${symbol} trade for $${amount} (${duration}s)`,
+                    type: "info",
+                    read: false
+                }));
+
+                await supabase
+                    .from("notifications")
+                    .insert(notifications);
+            }
+        } catch (notifError) {
+            console.error("Notification creation error:", notifError);
+            // Don't fail the trade if notification fails
+        }
+
         return NextResponse.json({ success: true, session, newBalance });
 
     } catch (error) {

@@ -42,8 +42,8 @@
   {
     "symbol": "TSLA",
     "name": "Tesla Inc.",
-    "price": 248.50,
-    "change": -5.20,
+    "price": 248.5,
+    "change": -5.2,
     "changePercent": -2.05,
     "volume": 56789012,
     "marketCap": 790000000000,
@@ -142,7 +142,7 @@
   {
     "symbol": "HD",
     "name": "The Home Depot Inc.",
-    "price": 378.90,
+    "price": 378.9,
     "change": 3.21,
     "changePercent": 0.85,
     "volume": 3210987,
@@ -174,7 +174,7 @@
     "name": "Adobe Inc.",
     "price": 567.89,
     "change": -4.56,
-    "changePercent": -0.80,
+    "changePercent": -0.8,
     "volume": 987654,
     "marketCap": 260000000000,
     "sector": "Technology"
@@ -183,7 +183,7 @@
     "symbol": "NFLX",
     "name": "Netflix Inc.",
     "price": 485.12,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 1.87,
     "volume": 876543,
     "marketCap": 215000000000,
@@ -242,7 +242,7 @@
   {
     "symbol": "COST",
     "name": "Costco Wholesale Corporation",
-    "price": 678.90,
+    "price": 678.9,
     "change": 5.67,
     "changePercent": 0.84,
     "volume": 210987,
@@ -272,7 +272,7 @@
   {
     "symbol": "ABBV",
     "name": "AbbVie Inc.",
-    "price": 178.90,
+    "price": 178.9,
     "change": 1.23,
     "changePercent": 0.69,
     "volume": 87654,
@@ -304,7 +304,7 @@
     "name": "Texas Instruments Inc.",
     "price": 175.67,
     "change": -1.23,
-    "changePercent": -0.70,
+    "changePercent": -0.7,
     "volume": 54321,
     "marketCap": 160000000000,
     "sector": "Technology"
@@ -424,7 +424,7 @@
     "name": "United Parcel Service Inc.",
     "price": 165.78,
     "change": 2.45,
-    "changePercent": 1.50,
+    "changePercent": 1.5,
     "volume": 2109,
     "marketCap": 145000000000,
     "sector": "Industrials"
@@ -442,7 +442,7 @@
   {
     "symbol": "AMAT",
     "name": "Applied Materials Inc.",
-    "price": 178.90,
+    "price": 178.9,
     "change": 4.56,
     "changePercent": 2.62,
     "volume": 987,
@@ -453,8 +453,8 @@
     "symbol": "INTU",
     "name": "Intuit Inc.",
     "price": 645.23,
-    "change": 8.90,
-    "changePercent": 1.40,
+    "change": 8.9,
+    "changePercent": 1.4,
     "volume": 876,
     "marketCap": 170000000000,
     "sector": "Technology"
@@ -494,7 +494,7 @@
     "name": "Deere & Company",
     "price": 412.34,
     "change": -1.23,
-    "changePercent": -0.30,
+    "changePercent": -0.3,
     "volume": 432,
     "marketCap": 115000000000,
     "sector": "Industrials"
@@ -542,7 +542,7 @@
   {
     "symbol": "CDNS",
     "name": "Cadence Design Systems Inc.",
-    "price": 278.90,
+    "price": 278.9,
     "change": 2.34,
     "changePercent": 0.85,
     "volume": 87,
@@ -553,7 +553,7 @@
     "symbol": "SNPS",
     "name": "Synopsys Inc.",
     "price": 512.34,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 1.77,
     "volume": 76,
     "marketCap": 48000000000,
@@ -612,7 +612,7 @@
   {
     "symbol": "ON",
     "name": "ON Semiconductor Corporation",
-    "price": 78.90,
+    "price": 78.9,
     "change": 2.45,
     "changePercent": 3.21,
     "volume": 10,
@@ -633,7 +633,7 @@
     "symbol": "CRWD",
     "name": "CrowdStrike Holdings Inc.",
     "price": 345.67,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 2.64,
     "volume": 8,
     "marketCap": 82000000000,
@@ -742,7 +742,7 @@
   {
     "symbol": "SNOW",
     "name": "Snowflake Inc.",
-    "price": 178.90,
+    "price": 178.9,
     "change": 4.56,
     "changePercent": 2.62,
     "volume": 1,
@@ -753,7 +753,7 @@
     "symbol": "MDB",
     "name": "MongoDB Inc.",
     "price": 445.12,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 2.04,
     "volume": 1,
     "marketCap": 32000000000,
@@ -784,7 +784,7 @@
     "name": "Okta Inc.",
     "price": 87.65,
     "change": 1.89,
-    "changePercent": 2.20,
+    "changePercent": 2.2,
     "volume": 1,
     "marketCap": 14000000000,
     "sector": "Technology"
@@ -794,7 +794,7 @@
     "name": "Varonis Systems Inc.",
     "price": 45.67,
     "change": 0.45,
-    "changePercent": 1.00,
+    "changePercent": 1,
     "volume": 1,
     "marketCap": 5000000000,
     "sector": "Technology"
@@ -802,7 +802,7 @@
   {
     "symbol": "QLYS",
     "name": "Qualys Inc.",
-    "price": 178.90,
+    "price": 178.9,
     "change": -1.23,
     "changePercent": -0.68,
     "volume": 1,
@@ -814,7 +814,7 @@
     "name": "Rapid7 Inc.",
     "price": 56.78,
     "change": 2.34,
-    "changePercent": 4.30,
+    "changePercent": 4.3,
     "volume": 1,
     "marketCap": 3500000000,
     "sector": "Technology"
@@ -824,7 +824,7 @@
     "name": "Tenable Holdings Inc.",
     "price": 45.12,
     "change": 1.23,
-    "changePercent": 2.80,
+    "changePercent": 2.8,
     "volume": 1,
     "marketCap": 5000000000,
     "sector": "Technology"
@@ -834,7 +834,7 @@
     "name": "Verra Mobility Corporation",
     "price": 12.34,
     "change": 0.23,
-    "changePercent": 1.90,
+    "changePercent": 1.9,
     "volume": 1,
     "marketCap": 2000000000,
     "sector": "Technology"
@@ -842,7 +842,7 @@
   {
     "symbol": "FRSH",
     "name": "Freshworks Inc.",
-    "price": 18.90,
+    "price": 18.9,
     "change": -0.45,
     "changePercent": -2.33,
     "volume": 1,
@@ -952,7 +952,7 @@
   {
     "symbol": "NU",
     "name": "Nu Holdings Ltd.",
-    "price": 8.90,
+    "price": 8.9,
     "change": 0.23,
     "changePercent": 2.65,
     "volume": 1,
@@ -964,7 +964,7 @@
     "name": "SoFi Technologies Inc.",
     "price": 7.89,
     "change": -0.12,
-    "changePercent": -1.50,
+    "changePercent": -1.5,
     "volume": 1,
     "marketCap": 7000000000,
     "sector": "Financial Services"
@@ -1013,7 +1013,7 @@
     "symbol": "COIN",
     "name": "Coinbase Global Inc.",
     "price": 145.67,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 6.51,
     "volume": 1,
     "marketCap": 34000000000,
@@ -1032,7 +1032,7 @@
   {
     "symbol": "SHOP",
     "name": "Shopify Inc.",
-    "price": 78.90,
+    "price": 78.9,
     "change": 2.34,
     "changePercent": 3.06,
     "volume": 1,
@@ -1062,7 +1062,7 @@
   {
     "symbol": "RVLV",
     "name": "Revolve Group Inc.",
-    "price": 18.90,
+    "price": 18.9,
     "change": 0.45,
     "changePercent": 2.44,
     "volume": 1,
@@ -1093,7 +1093,7 @@
     "symbol": "LULU",
     "name": "Lululemon Athletica Inc.",
     "price": 445.67,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 2.04,
     "volume": 1,
     "marketCap": 56000000000,
@@ -1112,7 +1112,7 @@
   {
     "symbol": "BBY",
     "name": "Best Buy Co. Inc.",
-    "price": 78.90,
+    "price": 78.9,
     "change": -1.23,
     "changePercent": -1.54,
     "volume": 1,
@@ -1174,7 +1174,7 @@
     "name": "Chipotle Mexican Grill Inc.",
     "price": 2456.78,
     "change": 45.67,
-    "changePercent": 1.90,
+    "changePercent": 1.9,
     "volume": 1,
     "marketCap": 67000000000,
     "sector": "Consumer Cyclical"
@@ -1192,7 +1192,7 @@
   {
     "symbol": "PZZA",
     "name": "Papa John's International Inc.",
-    "price": 78.90,
+    "price": 78.9,
     "change": 1.23,
     "changePercent": 1.58,
     "volume": 1,
@@ -1204,7 +1204,7 @@
     "name": "The Wendy's Company",
     "price": 19.45,
     "change": 0.23,
-    "changePercent": 1.20,
+    "changePercent": 1.2,
     "volume": 1,
     "marketCap": 4000000000,
     "sector": "Consumer Cyclical"
@@ -1272,7 +1272,7 @@
   {
     "symbol": "BJRI",
     "name": "BJ's Restaurants Inc.",
-    "price": 28.90,
+    "price": 28.9,
     "change": -0.67,
     "changePercent": -2.27,
     "volume": 1,
@@ -1302,7 +1302,7 @@
   {
     "symbol": "FWRG",
     "name": "First Watch Restaurant Group Inc.",
-    "price": 18.90,
+    "price": 18.9,
     "change": 0.45,
     "changePercent": 2.44,
     "volume": 1,
@@ -1324,7 +1324,7 @@
     "name": "Carrols Restaurant Group Inc.",
     "price": 7.89,
     "change": 0.23,
-    "changePercent": 3.00,
+    "changePercent": 3,
     "volume": 1,
     "marketCap": 400000000,
     "sector": "Consumer Cyclical"
@@ -1350,66 +1350,6 @@
     "sector": "Consumer Cyclical"
   },
   {
-    "symbol": "FRSH",
-    "name": "Freshworks Inc.",
-    "price": 18.90,
-    "change": -0.45,
-    "changePercent": -2.33,
-    "volume": 1,
-    "marketCap": 5000000000,
-    "sector": "Technology"
-  },
-  {
-    "symbol": "ASAN",
-    "name": "Asana Inc.",
-    "price": 23.45,
-    "change": 0.67,
-    "changePercent": 2.94,
-    "volume": 1,
-    "marketCap": 5000000000,
-    "sector": "Technology"
-  },
-  {
-    "symbol": "WK",
-    "name": "Workiva Inc.",
-    "price": 98.76,
-    "change": 2.34,
-    "changePercent": 2.43,
-    "volume": 1,
-    "marketCap": 5000000000,
-    "sector": "Technology"
-  },
-  {
-    "symbol": "DOCU",
-    "name": "DocuSign Inc.",
-    "price": 56.78,
-    "change": -1.89,
-    "changePercent": -3.22,
-    "volume": 1,
-    "marketCap": 11000000000,
-    "sector": "Technology"
-  },
-  {
-    "symbol": "COUP",
-    "name": "Coupa Software Inc.",
-    "price": 67.89,
-    "change": 1.23,
-    "changePercent": 1.84,
-    "volume": 1,
-    "marketCap": 6000000000,
-    "sector": "Technology"
-  },
-  {
-    "symbol": "BILL",
-    "name": "Bill.com Holdings Inc.",
-    "price": 89.12,
-    "change": 3.45,
-    "changePercent": 4.03,
-    "volume": 1,
-    "marketCap": 9000000000,
-    "sector": "Technology"
-  },
-  {
     "symbol": "BTC",
     "name": "Bitcoin",
     "price": 67890.12,
@@ -1433,7 +1373,7 @@
     "symbol": "SOL",
     "name": "Solana",
     "price": 145.67,
-    "change": 8.90,
+    "change": 8.9,
     "changePercent": 6.51,
     "volume": 5000000000,
     "marketCap": 65000000000,
