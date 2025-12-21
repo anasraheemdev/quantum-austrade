@@ -322,7 +322,7 @@ export default function LandingPage() {
               </div>
               <span className="text-xl font-bold text-white">QUANTUM</span>
             </div>
-            <p className="text-gray-400 max-w-sm mb-6">The world's most trusted social trading platform. Connect, trade, and grow your wealth with advanced tools and community insights.</p>
+            <p className="text-gray-400 max-w-sm mb-6">The world&apos;s most trusted social trading platform. Connect, trade, and grow your wealth with advanced tools and community insights.</p>
             <div className="flex gap-4">
               {/* Social placeholders */}
               <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-white/10 hover:text-white cursor-pointer transition-colors"><Globe className="w-5 h-5" /></div>

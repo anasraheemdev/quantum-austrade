@@ -3,6 +3,7 @@
 import { X, Copy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import Image from "next/image";
 
 interface DepositModalProps {
     isOpen: boolean;
@@ -97,8 +98,8 @@ export default function DepositModal({ isOpen, onClose }: DepositModalProps) {
                                         setCopied(false);
                                     }}
                                     className={`flex-1 px-4 py-2.5 rounded-lg font-medium transition-all ${selectedCrypto === "ethereum"
-                                            ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
-                                            : "bg-dark-hover text-gray-400 hover:text-white border border-dark-border"
+                                        ? "bg-blue-500/20 text-blue-400 border border-blue-500/30"
+                                        : "bg-dark-hover text-gray-400 hover:text-white border border-dark-border"
                                         }`}
                                 >
                                     Ethereum
@@ -109,8 +110,8 @@ export default function DepositModal({ isOpen, onClose }: DepositModalProps) {
                                         setCopied(false);
                                     }}
                                     className={`flex-1 px-4 py-2.5 rounded-lg font-medium transition-all ${selectedCrypto === "tron"
-                                            ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                                            : "bg-dark-hover text-gray-400 hover:text-white border border-dark-border"
+                                        ? "bg-red-500/20 text-red-400 border border-red-500/30"
+                                        : "bg-dark-hover text-gray-400 hover:text-white border border-dark-border"
                                         }`}
                                 >
                                     Tron
@@ -121,8 +122,8 @@ export default function DepositModal({ isOpen, onClose }: DepositModalProps) {
                                         setCopied(false);
                                     }}
                                     className={`flex-1 px-4 py-2.5 rounded-lg font-medium transition-all ${selectedCrypto === "bitcoin"
-                                            ? "bg-orange-500/20 text-orange-400 border border-orange-500/30"
-                                            : "bg-dark-hover text-gray-400 hover:text-white border border-dark-border"
+                                        ? "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                                        : "bg-dark-hover text-gray-400 hover:text-white border border-dark-border"
                                         }`}
                                 >
                                     Bitcoin
@@ -131,9 +132,11 @@ export default function DepositModal({ isOpen, onClose }: DepositModalProps) {
 
                             {/* QR Code */}
                             <div className="flex flex-col items-center justify-center mb-6 bg-white p-4 rounded-lg w-64 h-64 mx-auto">
-                                <img
+                                <Image
                                     src={currentCrypto.qrImage}
                                     alt={`${currentCrypto.name} QR Code`}
+                                    width={256}
+                                    height={256}
                                     className="w-full h-full object-contain"
                                 />
                             </div>

@@ -116,7 +116,7 @@ export default function TradePage() {
 
                             {filteredStocks.length === 0 && (
                                 <div className="col-span-full text-center py-12 text-gray-500">
-                                    No assets found matching "{searchQuery}"
+                                    No assets found matching &quot;{searchQuery}&quot;
                                 </div>
                             )}
                         </div>
