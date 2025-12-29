@@ -43,22 +43,56 @@ export default function LandingTerminal() {
 
     // Live Data Simulation
     useEffect(() => {
+        // Initial Fetch of Real Data
+        const fetchData = async () => {
+            try {
+                const res = await fetch('/api/stocks');
+                const stocks = await res.json();
+                const btc = stocks.find((s: any) => s.symbol === 'BTC');
+                if (btc) {
+                    setCurrentPrice(btc.price);
+                    setPriceChange(btc.changePercent);
+                    // Regenerate chart data centered around real price
+                    const newData = [];
+                    let price = btc.price;
+                    for (let i = 0; i < 50; i++) {
+                        price = price + (Math.random() - 0.48) * (btc.price * 0.005);
+                        newData.push({
+                            time: i,
+                            price: price,
+                            volume: Math.random() * 100
+                        });
+                    }
+                    setData(newData);
+                }
+            } catch (error) {
+                console.error("Error fetching BTC data:", error);
+            }
+        };
+
+        fetchData();
+
         const interval = setInterval(() => {
             // Update Chart
             setData(prev => {
+                if (prev.length === 0) return prev;
                 const lastPrice = prev[prev.length - 1].price;
-                const newPrice = lastPrice + (Math.random() - 0.5) * 100;
+                const volatility = lastPrice * 0.001; // 0.1% volatility
+                const newPrice = lastPrice + (Math.random() - 0.5) * volatility;
+
+                // Slowly converge to real price updates if we were polling, 
+                // but here just random walk from last real price is fine for visual effect.
                 setCurrentPrice(newPrice);
-                setPriceChange((Math.random() * 5) * (newPrice > lastPrice ? 1 : -1));
 
                 // Update Order Book
+                const spread = newPrice * 0.001;
                 setAsks(Array(8).fill(0).map((_, i) => ({
-                    price: newPrice + (i + 1) * 50,
+                    price: newPrice + spread + (i * spread),
                     amount: Math.random() * 0.5,
                     total: Math.random() * 10
                 })));
                 setBids(Array(8).fill(0).map((_, i) => ({
-                    price: newPrice - (i + 1) * 50,
+                    price: newPrice - spread - (i * spread),
                     amount: Math.random() * 0.5,
                     total: Math.random() * 10
                 })));

@@ -3,8 +3,7 @@ import { createServerClient, tryCreateAdminClient } from "@/lib/supabase";
 
 // Force dynamic rendering - this route uses request headers
 export const dynamic = 'force-dynamic';
-import fs from "fs";
-import path from "path";
+import { fetchCoinLoreData } from "@/lib/coinlore";
 
 export async function GET(request: NextRequest) {
   try {
@@ -62,10 +61,8 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Fetch current prices from static JSON
-    const filePath = path.join(process.cwd(), 'public', 'data', 'stocks.json');
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const allStocks = JSON.parse(fileContents);
+    // Fetch current prices from CoinLore API
+    const allStocks = await fetchCoinLoreData();
 
     const priceMap = new Map<string, { price: number; name: string }>();
     positions.forEach((pos: any) => {

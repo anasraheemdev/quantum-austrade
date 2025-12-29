@@ -214,22 +214,13 @@ export default function AdminTradeControl() {
                                         </div>
                                     </div>
 
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => setConfirmAction({ sessionId: item.id, action: 'LOSS' })}
-                                            className="flex-1 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 rounded-md text-sm font-medium transition-all hover:scale-105"
-                                        >
-                                            <XCircle className="w-4 h-4 inline mr-1" />
-                                            Force Loss
-                                        </button>
-                                        <button
-                                            onClick={() => setConfirmAction({ sessionId: item.id, action: 'WIN' })}
-                                            className="flex-1 px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 rounded-md text-sm font-medium transition-all hover:scale-105"
-                                        >
-                                            <CheckCircle className="w-4 h-4 inline mr-1" />
-                                            Force Win
-                                        </button>
-                                    </div>
+                                    <button
+                                        onClick={() => setConfirmAction({ sessionId: item.id, action: 'WIN' })}
+                                        className="w-full px-3 py-1.5 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 text-green-400 rounded-md text-sm font-medium transition-all hover:scale-105"
+                                    >
+                                        <CheckCircle className="w-4 h-4 inline mr-1" />
+                                        Make Profit
+                                    </button>
                                 </div>
                             ))}
                         </div>

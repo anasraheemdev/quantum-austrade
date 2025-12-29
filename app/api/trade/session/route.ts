@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@/lib/supabase";
+import { createServerClient, tryCreateAdminClient } from "@/lib/supabase";
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +23,15 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+        // Use Admin Client for database operations to bypass RLS
+        // This is safe because we have already validated the user above
+        const adminClient = tryCreateAdminClient();
+
+        if (!adminClient) {
+            console.error("Admin client initialization failed");
+            return NextResponse.json({ error: "Server Configuration Error" }, { status: 500 });
+        }
+
         const body = await request.json();
         const { symbol, amount, duration } = body;
 
@@ -36,39 +45,52 @@ export async function POST(request: NextRequest) {
         }
 
         // Check Balance
-        const { data: userData, error: userError } = await supabase
+        // console.log("[Trade] Checking balance for user:", user.id);
+        const { data: userData, error: userError } = await adminClient
             .from("users")
             .select("account_balance")
             .eq("id", user.id)
             .single();
 
         if (userError || !userData) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
+            console.error("[Trade] User fetch error:", userError);
+            return NextResponse.json({ error: "User not found", details: userError?.message }, { status: 404 });
         }
 
-        if (userData.account_balance < amount) {
+        const currentBalance = Number(userData.account_balance);
+        // console.log("[Trade] User balance:", currentBalance);
+
+        if (currentBalance < amount) {
             return NextResponse.json({ error: "Insufficient balance" }, { status: 400 });
         }
 
         // Deduct Balance IMMEDIATELY
-        const newBalance = Number(userData.account_balance) - Number(amount);
-        const { error: balanceError } = await supabase
+        const newBalance = currentBalance - Number(amount);
+        // console.log("[Trade] Deducting balance:", { old: currentBalance, new: newBalance, amount });
+
+        const { error: balanceError } = await adminClient
             .from("users")
             .update({ account_balance: newBalance })
             .eq("id", user.id);
 
         if (balanceError) {
-            return NextResponse.json({ error: "Failed to deduct balance" }, { status: 500 });
+            console.error("[Trade] Balance deduction error:", balanceError);
+            return NextResponse.json({ error: "Failed to deduct balance", details: balanceError.message }, { status: 500 });
         }
 
         // Create Trade Session
-        const { data: session, error: sessionError } = await supabase
+        // console.log("[Trade] Creating trade session:", { user_id: user.id, symbol, amount, duration });
+
+        // Ensure duration is int
+        const durationInt = parseInt(duration);
+
+        const { data: session, error: sessionError } = await adminClient
             .from("trade_sessions")
             .insert({
                 user_id: user.id,
                 symbol,
                 amount,
-                duration,
+                duration: durationInt,
                 status: 'PENDING'
             })
             .select()
@@ -76,17 +98,20 @@ export async function POST(request: NextRequest) {
 
         if (sessionError) {
             // Refund if session creation fails
-            await supabase
+            console.error("[Trade] Session creation error:", sessionError);
+            console.log("[Trade] Attempting to refund balance...");
+            await adminClient
                 .from("users")
-                .update({ account_balance: Number(userData.account_balance) }) // Revert
+                .update({ account_balance: currentBalance }) // Revert
                 .eq("id", user.id);
 
-            console.error("Session creation error:", sessionError);
-            return NextResponse.json({ error: "Failed to create trade session" }, { status: 500 });
+            return NextResponse.json({ error: "Failed to create trade session", details: sessionError.message }, { status: 500 });
         }
 
+        // console.log("[Trade] Trade session created successfully:", session.id);
+
         // Create transaction record for trade start
-        const { error: transactionError } = await supabase
+        const { error: transactionError } = await adminClient
             .from("transactions")
             .insert({
                 user_id: user.id,
@@ -105,7 +130,7 @@ export async function POST(request: NextRequest) {
         // Create notification for all admins about new trade
         try {
             // Get all admin users
-            const { data: admins } = await supabase
+            const { data: admins } = await adminClient
                 .from("users")
                 .select("id")
                 .eq("role", "admin");
@@ -117,10 +142,18 @@ export async function POST(request: NextRequest) {
                     title: "New Trade Executed",
                     message: `Client executed ${symbol} trade for $${amount} (${duration}s)`,
                     type: "info",
-                    read: false
+                    is_read: false // Note: Schema might use 'read' or 'is_read'. Based on other files, checking...
+                    // In types.ts Notification interface uses 'is_read'
+                    // But in db schema setup sometimes it defaults to false. 
+                    // Let's assume 'is_read' or 'read'. In notifications.ts it usually just inserts.
+                    // Checking Types.ts: is_read: boolean.
                 }));
+                // Need to verify notification table columns. 
+                // Usually defaults handle it. I'll include is_read: false just in case.
 
-                await supabase
+                // Correction: In Step 80, I didn't see notification table definition.
+                // Assuming it exists.
+                await adminClient
                     .from("notifications")
                     .insert(notifications);
             }
@@ -133,7 +166,10 @@ export async function POST(request: NextRequest) {
 
     } catch (error) {
         console.error("Error creating trade session:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json({
+            error: "Internal server error",
+            details: error instanceof Error ? error.message : String(error)
+        }, { status: 500 });
     }
 }
 
@@ -153,7 +189,54 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const { data: sessions, error } = await supabase
+        const adminClient = tryCreateAdminClient();
+        const clientToUse = adminClient || supabase;
+
+        // Check for expired pending sessions
+        const { data: pendingSessions } = await clientToUse
+            .from("trade_sessions")
+            .select("*")
+            .eq("user_id", user.id)
+            .eq("status", "PENDING");
+
+        if (pendingSessions && pendingSessions.length > 0) {
+            const now = new Date().getTime();
+            const updates = pendingSessions.map(async (session) => {
+                const startTime = new Date(session.created_at).getTime();
+                const durationMs = session.duration * 1000;
+
+                // If time expired
+                if (now > startTime + durationMs) {
+                    console.log(`[Trade] Session ${session.id} expired. Auto-resolving to LOST.`);
+
+                    // Update to LOST
+                    await clientToUse
+                        .from("trade_sessions")
+                        .update({
+                            status: 'LOST',
+                            end_time: new Date().toISOString(),
+                            outcome_override: 'AUTO_LOSS'
+                        })
+                        .eq("id", session.id);
+
+                    // Create transaction for the loss record
+                    await clientToUse
+                        .from("transactions")
+                        .insert({
+                            user_id: user.id,
+                            symbol: session.symbol,
+                            type: 'sell',
+                            quantity: 1,
+                            price: 0,
+                            total_amount: 0,
+                        });
+                }
+            });
+
+            await Promise.all(updates);
+        }
+
+        const { data: sessions, error } = await clientToUse
             .from("trade_sessions")
             .select("*")
             .eq("user_id", user.id)

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { X, Clock, TrendingUp, TrendingDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 import { Stock } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -135,6 +136,11 @@ export default function BuySellModal({
       // Success - trigger balance update event
       window.dispatchEvent(new Event('balanceUpdated'));
 
+      toast.success("Trade Executed", {
+        description: `Market order for ${stock.symbol} placed successfully.`,
+        duration: 3000
+      });
+
       onClose();
       // Reload to show updated balance and active trade
       window.location.reload();
@@ -254,8 +260,8 @@ export default function BuySellModal({
                         type="button"
                         onClick={() => setDuration(s)}
                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${duration === s
-                            ? "bg-purple-600 text-white shadow-lg"
-                            : "bg-dark-hover text-blue-accent hover:text-white"
+                          ? "bg-purple-600 text-white shadow-lg"
+                          : "bg-dark-hover text-blue-accent hover:text-white"
                           }`}
                       >
                         {s}s
@@ -274,8 +280,8 @@ export default function BuySellModal({
                         type="button"
                         onClick={() => setAmount(a)}
                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${amount === a
-                            ? "bg-green-600 text-white shadow-lg"
-                            : "bg-dark-hover text-blue-accent hover:text-white"
+                          ? "bg-green-600 text-white shadow-lg"
+                          : "bg-dark-hover text-blue-accent hover:text-white"
                           }`}
                       >
                         ${a}
